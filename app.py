@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request
 import requests
 import datetime
+import os  
 
 app = Flask(__name__)
 
-API_KEY = "abebaf9078dbd12310f37e9bb41a6224"
+# Read API key from environment variable
+API_KEY = os.getenv("WEATHER_API_KEY")
+
+if not API_KEY:
+    raise ValueError("Missing API Key! Set the 'WEATHER_API_KEY' environment variable.")
 
 # Unix timestamp Conversion
 def datetimeformat(value):
