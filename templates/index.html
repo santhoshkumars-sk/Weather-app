@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather & Pollution Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- Chart library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+</head>
+
+<body>
+
+    <video autoplay loop muted class="video-background">
+        <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="container">
+        <h1>Weather & Pollution Dashboard</h1>
+        <form method="POST">
+            <input type="text" name="city" placeholder="Enter city name" required>
+            <button type="submit">Get Data</button>
+        </form>
+
+        {% if weather_data %}
+        <div class="weather-container">
+            <h2>Weather in {{ weather_data["name"] }}</h2>
+            <div class="weather-grid">
+                
+                <div class="weather-card">
+                    <span class="weather-label">Temperature</span>
+                    <div class="weather-content">
+                        <img src="{{ url_for('static', filename='icons/thermometer.png') }}" class="weather-icon" alt="Temperature">
+                        <span class="weather-value">{{ weather_data['main']['temp'] }}°C</span>
+                    </div>
+                </div>
+
+                <div class="weather-card">
+                    <span class="weather-label">Weather</span>
+                    <div class="weather-content">
+                        <img src="{{ url_for('static', filename='icons/weather.png') }}" class="weather-icon" alt="Weather">
+                        <span class="weather-value">{{ weather_data['weather'][0]['description'] }}</span>
+                    </div>
+                </div>
+
+                <div class="weather-card">
+                    <span class="weather-label">Humidity</span>
+                    <div class="weather-content">
+                        <img src="{{ url_for('static', filename='icons/humidity.png') }}" class="weather-icon" alt="Humidity">
+                        <span class="weather-value">{{ weather_data['main']['humidity'] }}%</span>
+                    </div>
+                </div>
+
+                <div class="weather-card">
+                    <span class="weather-label">Wind Speed</span>
+                    <div class="weather-content">
+                        <img src="{{ url_for('static', filename='icons/wind-speed.png') }}" class="weather-icon" alt="Wind Speed">
+                        <span class="weather-value">{{ weather_data['wind']['speed'] }} m/s</span>
+                    </div>
+                </div>
+
+                <div class="weather-card">
+                    <span class="weather-label">Wind Degree</span>
+                    <div class="weather-content">
+                        <img src="{{ url_for('static', filename='icons/compass.png') }}" class="weather-icon" alt="Wind Degree">
+                        <span class="weather-value">{{ weather_data['wind']['deg'] }}°</span>
+                    </div>
+                </div>
+
+                <div class="weather-card">
+                    <span class="weather-label">Sunrise</span>
+                    <div class="weather-content">
+                        <img src="{{ url_for('static', filename='icons/sunrise.png') }}" class="weather-icon" alt="Sunrise">
+                        <span class="weather-value">{{ weather_data['sys']['sunrise'] | datetimeformat }}</span>
+                    </div>
+                </div>
+
+                <div class="weather-card">
+                    <span class="weather-label">Sunset</span>
+                    <div class="weather-content">
+                        <img src="{{ url_for('static', filename='icons/sunset.png') }}" class="weather-icon" alt="Sunset">
+                        <span class="weather-value">{{ weather_data['sys']['sunset'] | datetimeformat }}</span>
+                    </div>
+                </div>
+
+                <div class="weather-card">
+                    <span class="weather-label">Visibility</span>
+                    <div class="weather-content">
+                        <img src="{{ url_for('static', filename='icons/eye.png') }}" class="weather-icon" alt="Visibility">
+                        <span class="weather-value">{{ weather_data['visibility'] }} m</span>
+                    </div>
+                </div>
+
+                <div class="weather-card">
+                    <span class="weather-label">Cloud Coverage</span>
+                    <div class="weather-content">
+                        <img src="{{ url_for('static', filename='icons/cloud-coverage.png') }}" class="weather-icon" alt="Cloud Coverage">
+                        <span class="weather-value">{{ weather_data['clouds']['all'] }}%</span>
+                    </div>
+                </div>
+
+                <div class="weather-card">
+                    <span class="weather-label">Pressure</span>
+                    <div class="weather-content">
+                        <img src="{{ url_for('static', filename='icons/pressure-gauge1.png') }}" class="weather-icon" alt="Pressure">
+                        <span class="weather-value">{{ weather_data['main']['pressure'] }} hPa</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-box">
+                <h3>Air Pollution Levels</h3>
+                <canvas id="pollutionChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3>Temperature Forecast</h3>
+                <canvas id="temperatureChart"></canvas>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        const pollutionData = {% if pollution_data %} {{ pollution_data | tojson }} {% else %} null {% endif %};
+        const temperatureForecast = {% if temperature_forecast %} {{ temperature_forecast["hourly"]["temperature_2m"] | tojson }} {% else %} null {% endif %};
+    </script>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
