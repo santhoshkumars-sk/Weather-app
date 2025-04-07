@@ -22,7 +22,7 @@ Weather-app-main/
 │-- static/
 │   │-- script.js           # JavaScript for interactivity
 │   │-- style.css           # Styles for the UI
-│   │-- background.mp4      # Animated background
+│   │-- background.jpg      # Animated background
 │   └── icons/              # Weather-related icons
 │-- templates/
 │   └── index.html          # Main HTML page
